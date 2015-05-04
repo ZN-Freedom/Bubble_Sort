@@ -1,7 +1,7 @@
 /*! 
- *  \mainpage Bubble Sort
+ *  \mainpage Quick Sort
  *  \section intro_sec Description
- *  There is example of using bubble sort based on templates.
+ *  There is example of using quick sort based on templates.
  */
 
 /*!
@@ -37,18 +37,34 @@ std::vector <std::string> split(std::string &string, char delim)
 }
 
 /*! 
- *  \brief Bubble Sort function.
+ *  \brief Quick Sort function.
  *  \param v Reference to sorted vector.
+ *  \param left First value in vector / sub-vector.
+ *  \param right Last value in vector / sub-vector.
  *  \return Function returns nothing.
  */
-template <typename T > void bubbleSort(std::vector<T>& v)
+template <typename T> void quickSort(std::vector<T> &v, int left, int right) 
 {
-    for (std::size_t i = 0; v.size() && i < v.size() - 1; i ++)
-        for (std::size_t j = i; j + 1 > 0; j --)
-            if(v[j] > v[j + 1])
-                std::swap(v[j], v[j + 1]);
-}
+    int i = left, 
+        j = right;
 
+    T middleElement = v.at((left + right) / 2);
+
+    while (i <= j) 
+    {
+        while (v.at(i) < middleElement) i++;
+        while (v.at(j) > middleElement) j--;
+
+        if (i <= j) 
+        {
+            std::swap(v.at(i), v.at(j));
+            i++; j--;
+        }
+    }
+
+    if (i < right) quickSort(v, i, right);
+    if (j > left)  quickSort(v, left, j);
+}
 
 /*! 
  *  \brief Getting information about vector size.
@@ -106,7 +122,7 @@ std::vector<int> getVector(int vSize)
     while (!successCode);
 
     for (std::vector<std::string>::iterator i = numbers.begin(); i != numbers.end(); i ++)
-        v.push_back(atoi((*i).c_str()));
+        v.push_back(atoi((*i).c_str())); 
 
     return v;
 }
@@ -114,13 +130,13 @@ std::vector<int> getVector(int vSize)
 
 /*! 
  *  \brief Program entry point.
- *  \details User takes integer vector and sorts it using bubble sort.
+ *  \details User takes integer vector and sorts it using quick sort.
  */
 void main()
 {
     std::vector<int> v = getVector(getSize());
 
-    bubbleSort (v);
+    quickSort (v, 0, v.size() - 1);
 
     std::cout << std::endl << "Bubble sorted array: ";
     for (std::vector<int>::iterator i = v.begin(); i != v.end(); i ++)
